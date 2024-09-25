@@ -27,11 +27,13 @@ const webpack = require("webpack"),
         plugins: [
             new htmlWebpackPlugin({
                 template: "./src/client/views/index.html",
-                filename: "./index.html"
+                filename: "./index.html",
+                minify: false, // Disable minification for testing
+
             }),
             new CleanWebpackPlugin({
                 // Simulate the removal of files
-                dry: true,
+                dry: false,
                 // Write Logs to Console
                 verbose: false,
                 // Automatically remove all unused webpack assets on rebuild
