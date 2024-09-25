@@ -3,7 +3,7 @@
 
 ## Introduction
 The Travel Planner App helps users organize and plan their trips with ease. It allows users to manage their trips, whether they are scheduled for today, upcoming, or in the past. Users can also view the weather forecast for their travel dates using the Weatherbit API and fetch images of their destinations using the Pixabay API. The app stores trip data in the browser's local storage, providing data persistence across sessions.
-
+## [Image showing the project](webpagescreen.png)
 ## Features
 - **Add and Manage Trips:** Users can add, view, and delete trips.
 - **Weather Forecast:** Displays weather forecasts for specific departure dates using the Weatherbit API.
