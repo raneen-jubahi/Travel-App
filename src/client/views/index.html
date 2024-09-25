@@ -1,107 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- meta description -->
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- bootstrap cdn and bootstrap icons -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-    />
-
-    <!-- google fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=REM:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
     <title>Travel App</title>
-  </head>
-  <body>
-    <div
-      class="container flex-column d-flex justify-content-center align-items-center text-center py-3"
-      width="100"
-    >
-      <header class="site-header align-self-lg-start mb-5">
-        <h1 class="site-title">Where do you wanna Go?</h1>
-      </header>
-      <div
-        id="form_row"
-        class="row flex-column justify-content-center align-items-center mt-5"
-      >
-        <div class="col">
+</head>
+<body>
+    <div class="container flex-column d-flex justify-content-center align-items-center text-center py-3">
+        <header class="site-header align-self-lg-start mb-5">
+            <div class="site-title-container">
+                <h1 class="site-title">Where do u want to go?</h1>
+                <p class="site-subtitle">Plan your perfect trip with us!</p>
+            </div>
+        </header>
         
-          <form onsubmit="return Client.handleSubmit(event)" method="POST">
+        <div id="form_row" class="row flex-column justify-content-center align-items-center mt-5">
+            <div class="col">
+                <form id="tripForm">
+                    <!-- City Input -->
+                    <div class="input-group mb-3">
+                        <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                        <input type="text" name="city" id="city" class="form-control form-control-lg" placeholder="Enter your Destination" aria-label="City" required />
+                    </div>
+                    <div id="city_error" class="alert alert-danger mt-2 form-text text-start py-2" role="alert"></div>
 
-                      <div class="input-group">
-              <span class="input-group-text"
-                ><i class="bi bi-geo-alt"></i
-              ></span>
-              <input
-                type="text"
-                name="city"
-                id="city"
-                class="form-control form-control-lg"
-                placeholder="Entry your Destination"
-                aria-label="City"
-                aria-describedby="City"
-              />
+                    <!-- Date Input -->
+                    <div class="mt-4">
+                        <input type="date" name="date" class="form-control form-control-lg" id="flightDate" required />
+                    </div>
+                    <div id="date_error" class="alert alert-danger mt-2 form-text text-start py-2" role="alert"></div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary btn-lg mt-4">Submit</button>
+                </form>
             </div>
-            <div
-              id="city_error"
-              class="alert alert-danger  mt-2 form-text text-start py-2"
-              role="alert"
-            >
-              
+
+            <div class="col flight_data my-5 fade-in">
+                <!-- Weather Data Display -->
+                <h2 id="Rdays"></h2>
+                <p class="cityName"></p>
+                <p class="temp"></p>
+                <p class="max-temp"></p>
+                <p class="min-temp"></p>
+                <p class="weather"></p>
+                <div class="cityPic"></div>
             </div>
-            <div class="mt-4">
-              <input
-                type="date"
-                name="date"
-                class="form-control form-control-lg"
-                id="flightDate"
-              />
-            </div>
-            <div
-              id="date_error"
-              class="alert alert-danger  mt-2 form-text text-start py-2"
-              role="alert"
-            >
-              <i class="bi bi-exclamation-circle-fill me-2"></i> A simple danger
-              alert—check it out!
-            </div>
-            <button type="submit" class="btn btn-primary btn-lg mt-4">
-              Submit
-            </button>
-          </form>
-          <!--  -->
         </div>
-        <div class="col flight_data my-5">
-          <h2 id="Rdays"></h2>
-          <p class="cityName"></p>
-          <p class="temp"></p>
-          <p class="max-temp"></p>
-          <p class="min-temp"></p>
-          <p class="weather"></p>
-          <div class="cityPic"></div>
+
+        <!-- Trip Summary Section -->
+        <div class="trip-summary">
+            <h3>Your Trip Summary</h3>
+            <div id="tripDetails"></div>
+            <button id="removeTrip" class="btn btn-danger mt-3">Remove Trip</button>
         </div>
-      </div>
+        <button id="printTrip" class="btn btn-secondary mt-3">Print Trip</button>
     </div>
 
-    <!-- bootstrap scrip added manually -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-      crossorigin="anonymous"
-    ></script>
-  </body>
-</html>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Remove trip event listener
+      document.getElementById('removeTrip').addEventListener('click', function() {
+          document.getElementById('tripDetails').innerHTML = '';
+          document.querySelector('.cityName').innerHTML = '';
+          document.querySelector('.temp').innerHTML = '';
+          document.querySelector('.max-temp').innerHTML = '';
+          document.querySelector('.min-temp').innerHTML = '';
+          document.querySelector('.weather').innerHTML = '';
+          document.querySelector('.cityPic').innerHTML = '';
+      });
+    
+      // Print trip event listener
+      document.getElementById('printTrip').addEventListener('click', function() {
+          window.print();
+      });
+    
+      // Function to display trip details
+      function displayTripDetails(city, date) {
+          document.getElementById('tripDetails').innerHTML = `Destination: ${city} <br> Date: ${date}`;
+      }
+
+      // Add event listener for form submission
+      document.getElementById('tripForm').addEventListener('submit', async function(event) {
+          event.preventDefault(); // Prevent page reload
+          const city = document.getElementById('city').value; // Get city value
+          const date = document.getElementById('flightDate').value; // Get date value
+
+          // Call the function to get weather data
+          const weatherData = await getWeatherData(city);
+          
+          // Display weather data
+          if (weatherData) {
+              document.querySelector('.cityName').innerHTML = `City: ${city}`;
+              document.querySelector('.temp').innerHTML = `Temperature: ${weatherData.temp} °C`;
+              document.querySelector('.max-temp').innerHTML = `Max Temp: ${weatherData.maxTemp} °C`;
+              document.querySelector('.min-temp').innerHTML = `Min Temp: ${weatherData.minTemp} °C`;
+              document.querySelector('.weather').innerHTML = `Weather: ${weatherData.weatherDescription}`;
+              document.querySelector('.cityPic').innerHTML = `<img src="${weatherData.cityPic}" alt="City Image" class="img-fluid" />`;
+          }
+
+          // Display trip details
+          displayTripDetails(city, date);
+      });
+    
+      // Function to fetch weather data
+      async function getWeatherData(city) {
+          // Mock weather data for demonstration
+          return {
+              temp: 25,
+              maxTemp: 30,
+              minTemp: 20,
+              weatherDescription: "Sunny",
+              cityPic: "https://via.placeholder.com/150"
+          };
+      }
+    </script>
+
+
+</body>
+
+</html
+
+
+

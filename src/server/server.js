@@ -22,12 +22,13 @@ dotenv.config()
 
 
 const userstring = process.env.USERNAME
+console.log(userstring);
 const usernumber = process.env.USERNUMBER
 const username = userstring.concat(usernumber)
 const  weather_key = process.env.WEATHER_KEY
 const pixabay_key = process.env.pixabay_key
 
-
+console.log(username);
 
 
 //using cors
@@ -43,6 +44,8 @@ res.send(Location)
 
 
 app.post("/getWeather", async (req,res) => {
+  console.log(req.body)
+
   const {lng, lat, remainingDays} = req.body
   const getWeather = await getweather(lng, lat, remainingDays, weather_key)
   return res.send(getWeather)

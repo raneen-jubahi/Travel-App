@@ -106,8 +106,8 @@ const getWeather = async (lng, lat, remainingDays) => {
     lat,
     remainingDays,
   });
-
   return data;
+  
 };
 
 const getRdays = (date) => {

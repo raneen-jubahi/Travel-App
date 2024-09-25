@@ -1,63 +1,157 @@
-
-
-
-// استيراد ملف breakpoints
 @import './breakPoints';
 
-// ضبط الـ box-sizing لجميع العناصر
 * {
   box-sizing: border-box;
 }
 
-
-
-// تنسيقات للجسم (body)
 body {
-  background-attachment: fixed; /* تثبيت الخلفية عند التمرير */
-  background-image: url("../images/background.jpg"); /* تأكد من أن المسار صحيح */
-  background-repeat: no-repeat; /* منع تكرار الصورة */
-  background-size: cover; /* ضبط الخلفية لتغطية العنصر بالكامل */
-  background-position: center center; /* مركزية الخلفية */
-  background-color: #2c2c2c; /* لون الخلفية في المساحات غير المشغولة بالصورة */
-  font-family: "REM", sans-serif; /* تعيين نوع الخط */
+  background-attachment: fixed;
+  background-image: url("../images/background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  background-color: #2c2c2c;
+  font-family: "REM", sans-serif;
 }
 
 .container {
   min-height: 100vh;
 
   .site-header {
-    background-color: #333;
+    background-color: rgba(51, 51, 51, 0.8);
     color: #fff;
     padding: 20px;
+    border-radius: 10px;
 
     .site-title {
-      font-size: 23px;
+      font-size: 3rem; // تعديل الحجم
       margin: 0;
       text-align: center;
       text-transform: uppercase;
 
-      // استخدام المزيج للاستجابة لحجم الشاشات
       @include respond-to("sm") {
-        font-size: 48px;
+        font-size: 4rem; // حجم أكبر للشاشات الصغيرة
       }
     }
   }
 
   #form_row {
     width: 90%;
+    margin: 0 auto; // توسيط الشكل
 
-    // استجابة لحجم الشاشة
     @include respond-to("lg") {
       width: 50%;
     }
 
-    // إخفاء الأخطاء بشكل افتراضي
-    #city_error {
-      display: none;
-    }
-
+    #city_error,
     #date_error {
       display: none;
     }
+  }
+
+  .site-title-container {
+    text-align: center; 
+    margin: 50px 0; 
+    position: relative; 
+  }
+
+  .site-title {
+    font-size: 4rem; 
+    font-weight: bold; 
+    color: #ff4500; 
+    animation: bounce 2s infinite; 
+  }
+
+  .site-subtitle {
+    font-size: 1.8rem; 
+    color: #4682b4; 
+    margin-top: 15px; 
+    opacity: 0; 
+    animation: fadeIn 2s forwards; 
+    animation-delay: 1s; 
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-30px); 
+    }
+    60% {
+        transform: translateY(-15px); 
+    }
+  }
+
+  @keyframes fadeIn {
+    to {
+        opacity: 1; 
+    }
+  }
+
+  .trip-summary {
+    margin-top: 20px;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+
+    h3 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    #tripDetails {
+      margin: 10px 0;
+      font-size: 18px;
+      color: #444;
+    }
+
+    button {
+      margin-top: 10px;
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+    }
+  }
+
+  #printTrip {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+
+  .button {
+    transition: background-color 0.3s, transform 0.2s;
+  }
+
+  .button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
+
+  .fade-in {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+  }
+
+  .video-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+  }
+
+  .video-background video {
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover;
   }
 }
