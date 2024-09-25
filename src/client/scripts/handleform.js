@@ -1,11 +1,18 @@
 import axios from "axios";
 
-// اختيار العناصر من DOM
-const form = document.querySelector("form");
-const cityInput = document.querySelector("#city");
-const dateInput = document.querySelector("#flightDate");
-const cityError = document.querySelector("#city_error");
-const dateError = document.querySelector("#date_error");
+// وضع الكود داخل حدث DOMContentLoaded
+document.addEventListener("DOMContentLoaded", () => {
+    // اختيار العناصر من DOM
+    const form = document.querySelector("form");
+    const cityInput = document.querySelector("#city");
+    const dateInput = document.querySelector("#flightDate");
+
+    const cityError = document.querySelector("#city_error");
+    const dateError = document.querySelector("#date_error");
+
+    // إضافة حدث الإرسال إلى النموذج
+    form.addEventListener("submit", handleSubmit);
+});
 
 // دالة التعامل مع الإرسال
 const handleSubmit = async (e) => {
@@ -17,6 +24,7 @@ const handleSubmit = async (e) => {
     }
 
     try {
+        // الحصول على الموقع أولاً
         const locationData = await getCityLoc();
         if (locationData && locationData.error) {
             cityError.innerHTML = `<i class="bi bi-exclamation-circle-fill me-2"></i>${locationData.message}`;
@@ -27,6 +35,7 @@ const handleSubmit = async (e) => {
         const { lng, lat, name } = locationData;
         const date = dateInput.value;
 
+        // تحقق من إدخال التاريخ
         if (!date) {
             dateError.innerHTML = `<i class="bi bi-exclamation-circle-fill me-2"></i>يرجى إدخال التاريخ`;
             dateError.style.display = "block";
@@ -51,6 +60,8 @@ const handleSubmit = async (e) => {
 
 // دالة للتحقق من المدخلات
 const validateInputs = () => {
+    const cityError = document.querySelector("#city_error");
+    const dateError = document.querySelector("#date_error");
     cityError.style.display = "none";
     dateError.style.display = "none";
 
@@ -143,4 +154,5 @@ const updateUI = (remainingDays, city, pic, weather) => {
     document.querySelector(".flight_data").style.display = "block";
 };
 
+// تصدير الدالة
 export { handleSubmit };
