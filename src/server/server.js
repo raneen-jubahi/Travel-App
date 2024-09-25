@@ -1,8 +1,11 @@
 const express = require("express")
 const app = express();
+const favicon = require('serve-favicon');
+const path = require('path');
+
 const cors = require("cors");
 const dotenv = require("dotenv");
-const port =3000;
+const port =3001;
 
 //get the city function which get location from geoNames
 const  {getCityLoc} = require("./getCityLoc")
@@ -21,14 +24,15 @@ app.use(express.static('dist'))
 dotenv.config()
 
 
-const userstring = process.env.USERNAME
-console.log(userstring);
-const usernumber = process.env.USERNUMBER
-const username = userstring.concat(usernumber)
+const userstring = process.env.USERNAME ;
+let usernumber = process.env.USERNUMBER 
+console.log(userstring); // Check the value of userstring
+const username = userstring + usernumber;
+ console.log(username);
+
 const  weather_key = process.env.WEATHER_KEY
 const pixabay_key = process.env.pixabay_key
 
-console.log(username);
 
 
 //using cors
@@ -58,4 +62,4 @@ app.post("/getCityPic", async (req,res) => {
 })
 
 
-app.listen(3000, () => console.log(`server is listening on port ${port}`))
+app.listen(3001, () => console.log(`server is listening on port ${port}`))

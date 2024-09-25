@@ -88,7 +88,7 @@ const validate_inputs = () => {
 
 const getCityLoc = async () => {
   if (cityInp.value) {
-    const { data } = await axios.post("http://localhost:3000/getCityLoc", form, {
+    const { data } = await axios.post("http://localhost:3001/getCityLoc", form, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -101,7 +101,7 @@ const getCityLoc = async () => {
 };
 
 const getWeather = async (lng, lat, remainingDays) => {
-  const { data } = await axios.post("http://localhost:3000/getWeather", {
+  const { data } = await axios.post("http://localhost:3001/getWeather", {
     lng,
     lat,
     remainingDays,
@@ -126,7 +126,7 @@ const getRdays = (date) => {
 
 //getting the city picture from pixabay
 const getCityPic = async (city_name) => {
-  const { data } = await axios.post("http://localhost:3000/getCityPic", {
+  const { data } = await axios.post("http://localhost:3001/getCityPic", {
     city_name,
   });
   const { image } = await data;
