@@ -1,65 +1,36 @@
-const express = require("express")
+require('dotenv').config(); // قم بتحميل المتغيرات البيئية
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const { getCityLoc } = require('./getCityLoc');
+const { getweather } = require('./getweather');
+const { getCityPic } = require('./getCityPic');
+
 const app = express();
-const favicon = require('serve-favicon');
-const path = require('path');
+const PORT = process.env.PORT || 3001;
 
-const cors = require("cors");
-const dotenv = require("dotenv");
-const port =3001;
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-//get the city function which get location from geoNames
-const  {getCityLoc} = require("./getCityLoc")
-const {getweather} = require("./getweather")
-const {getCityPic} = require("./getCityPic")
+app.post('/api/getWeather', async (req, res) => {
+    const { city, days } = req.body; // احصل على المدينة وعدد الأيام من الجسم
+    const username = process.env.USERNAME; // استخدم اسم المستخدم من المتغيرات البيئية
+    const weatherKey = process.env.WEATHER_KEY; // استخدم مفتاح الطقس من المتغيرات البيئية
+    const imageKey = process.env.PIXABAY_KEY; // استخدم مفتاح Pixabay من المتغيرات البيئية
 
+    try {
+        const location = await getCityLoc(city, username);
+        const weatherData = await getweather(location.lng, location.lat, days, weatherKey);
+        const cityPic = await getCityPic(city, imageKey);
+        
+        res.json({ location, weatherData, cityPic });
+    } catch (error) {
+        console.error('Error in /api/getWeather:', error.message);
+        res.status(500).json({ message: 'Internal Server Error', error: error.message });
+    }
+});
 
-app.get("/", (req, res) => {
-    res.render("index.html")
-  })
-
-
-//read the json files coming to you
-app.use(express.json())
-app.use(express.static('dist'))
-dotenv.config()
-
-
-const userstring = process.env.USERNAME ;
-let usernumber = process.env.USERNUMBER 
-console.log(userstring); // Check the value of userstring
-const username = userstring + usernumber;
- console.log(username);
-
-const  weather_key = process.env.WEATHER_KEY
-const pixabay_key = process.env.pixabay_key
-
-
-
-//using cors
-app.use(cors())
-
-  app.post("/getCityLoc", async (req,res) => {
-    console.log(req.body)
-const{city }=req.body;
-const Location= await getCityLoc(city, username)
-res.send(Location)
-})
-
-
-
-app.post("/getWeather", async (req,res) => {
-  console.log(req.body)
-
-  const {lng, lat, remainingDays} = req.body
-  const getWeather = await getweather(lng, lat, remainingDays, weather_key)
-  return res.send(getWeather)
-})
-
-app.post("/getCityPic", async (req,res) => {
-  const {city_name} = req.body
-  const getPic = await getCityPic(city_name, pixabay_key)
-  return res.send(getPic)
-})
-
-
-app.listen(3001, () => console.log(`server is listening on port ${port}`))
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});

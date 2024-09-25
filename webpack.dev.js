@@ -10,7 +10,11 @@ module.exports = merge(common, {
         rules: [
             {
                 test: /\.s[ac]ss$/i,
-                use: ["style-loader", "css-loader", "sass-loader"]
+                use: [
+                    "style-loader",  // يقوم بإضافة CSS إلى DOM
+                    "css-loader",     // يقوم بقراءة ملفات CSS
+                    "sass-loader"     // يقوم بتحويل SCSS إلى CSS
+                ]
             }
         ]
     },
@@ -23,10 +27,10 @@ module.exports = merge(common, {
     },
     optimization: {
         minimizer: [
-            // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
+            // يمكنك استخدام الصيغة `...` لتمديد المعززات الموجودة (مثل `terser-webpack-plugin`)
             // `...`,
             new CssMinimizerPlugin(),
         ],
         minimize: true,
     },
-})
+});

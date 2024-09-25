@@ -3,124 +3,104 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
-    <title>Travel App</title>
+    <link rel="stylesheet" href="./dist/style.d14b813fe973e3eddfda.css" /> <!-- تأكد من تحديث هذا -->
+    <title>Global Travel Planner</title>
 </head>
 <body>
-    <div class="container flex-column d-flex justify-content-center align-items-center text-center py-3">
-        <header class="site-header align-self-lg-start mb-5">
-            <div class="site-title-container">
-                <h1 class="site-title">Where do u want to go?</h1>
-                <p class="site-subtitle">Plan your perfect trip with us!</p>
-            </div>
-        </header>
-        
-        <div id="form_row" class="row flex-column justify-content-center align-items-center mt-5">
-            <div class="col">
-                <form id="tripForm">
-                    <!-- City Input -->
-                    <div class="input-group mb-3">
-                        <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
-                        <input type="text" name="city" id="city" class="form-control form-control-lg" placeholder="Enter your Destination" aria-label="City" required />
-                    </div>
-                    <div id="city_error" class="alert alert-danger mt-2 form-text text-start py-2" role="alert"></div>
-
-                    <!-- Date Input -->
-                    <div class="mt-4">
-                        <input type="date" name="date" class="form-control form-control-lg" id="flightDate" required />
-                    </div>
-                    <div id="date_error" class="alert alert-danger mt-2 form-text text-start py-2" role="alert"></div>
-
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary btn-lg mt-4">Submit</button>
-                </form>
-            </div>
-
-            <div class="col flight_data my-5 fade-in">
-                <!-- Weather Data Display -->
-                <h2 id="Rdays"></h2>
-                <p class="cityName"></p>
-                <p class="temp"></p>
-                <p class="max-temp"></p>
-                <p class="min-temp"></p>
-                <p class="weather"></p>
-                <div class="cityPic"></div>
-            </div>
-        </div>
-
-        <!-- Trip Summary Section -->
-        <div class="trip-summary">
-            <h3>Your Trip Summary</h3>
-            <div id="tripDetails"></div>
-            <button id="removeTrip" class="btn btn-danger mt-3">Remove Trip</button>
-        </div>
-        <button id="printTrip" class="btn btn-secondary mt-3">Print Trip</button>
+    <!-- خلفية الفيديو العالمية -->
+    <div class="video-background">
+        <video autoplay muted loop>
+            <source src="istockphoto-1764432866-640_adpp_is.mp4" type="video/mp4">
+        </video>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="container text-center py-5">
+        <header class="header mb-5">
+            <h1 class="display-2 fw-bold text-white">Where do you want to go?</h1>
+            <p class="lead fs-4 text-white">Plan your perfect trip with us and explore the world in style!</p>
+        </header>
+        
+        <form id="tripForm" class="mb-4">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="input-group mb-3">
+                        <input type="text" id="city" class="form-control form-control-lg" placeholder="Enter your Destination" required />
+                        <button class="btn btn-primary btn-lg" type="submit">
+                            <i class="fas fa-paper-plane"></i> Submit
+                        </button>
+                    </div>
+                    <input type="date" id="flightDate" class="form-control form-control-lg mb-3" required />
+                    <div id="city_error" class="alert alert-danger d-none"></div>
+                </div>
+            </div>
+        </form>
+
+        <div id="tripDetails" class="trip-details p-5 mb-3 shadow-lg rounded bg-white"></div>
+        <button id="printTrip" class="btn btn-secondary btn-lg mt-3 d-none">
+            Print Trip <i class="fas fa-print"></i>
+        </button>
+    </div>
+
     <script>
-      // Remove trip event listener
-      document.getElementById('removeTrip').addEventListener('click', function() {
-          document.getElementById('tripDetails').innerHTML = '';
-          document.querySelector('.cityName').innerHTML = '';
-          document.querySelector('.temp').innerHTML = '';
-          document.querySelector('.max-temp').innerHTML = '';
-          document.querySelector('.min-temp').innerHTML = '';
-          document.querySelector('.weather').innerHTML = '';
-          document.querySelector('.cityPic').innerHTML = '';
-      });
-    
-      // Print trip event listener
-      document.getElementById('printTrip').addEventListener('click', function() {
-          window.print();
-      });
-    
-      // Function to display trip details
-      function displayTripDetails(city, date) {
-          document.getElementById('tripDetails').innerHTML = `Destination: ${city} <br> Date: ${date}`;
-      }
+        document.getElementById('tripForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const city = document.getElementById('city').value;
+            const date = document.getElementById('flightDate').value;
 
-      // Add event listener for form submission
-      document.getElementById('tripForm').addEventListener('submit', async function(event) {
-          event.preventDefault(); // Prevent page reload
-          const city = document.getElementById('city').value; // Get city value
-          const date = document.getElementById('flightDate').value; // Get date value
+            const weatherData = await getWeatherData(city);
+            if (weatherData) {
+                displayTripDetails(city, date, weatherData);
+            }
+        });
 
-          // Call the function to get weather data
-          const weatherData = await getWeatherData(city);
-          
-          // Display weather data
-          if (weatherData) {
-              document.querySelector('.cityName').innerHTML = `City: ${city}`;
-              document.querySelector('.temp').innerHTML = `Temperature: ${weatherData.temp} °C`;
-              document.querySelector('.max-temp').innerHTML = `Max Temp: ${weatherData.maxTemp} °C`;
-              document.querySelector('.min-temp').innerHTML = `Min Temp: ${weatherData.minTemp} °C`;
-              document.querySelector('.weather').innerHTML = `Weather: ${weatherData.weatherDescription}`;
-              document.querySelector('.cityPic').innerHTML = `<img src="${weatherData.cityPic}" alt="City Image" class="img-fluid" />`;
-          }
+        async function getWeatherData(city) {
+            try {
+                const response = await fetch(`https://api.weatherapi.com/v1/current.json?key=f2f6b3ef801c439a9684e706de682f38&q=${city}`);
+                const data = await response.json();
 
-          // Display trip details
-          displayTripDetails(city, date);
-      });
-    
-      // Function to fetch weather data
-      async function getWeatherData(city) {
-          // Mock weather data for demonstration
-          return {
-              temp: 25,
-              maxTemp: 30,
-              minTemp: 20,
-              weatherDescription: "Sunny",
-              cityPic: "https://via.placeholder.com/150"
-          };
-      }
+                if (!data.current) {
+                    throw new Error("City not found");
+                }
+
+                return {
+                    temp: data.current.temp_c,
+                    maxTemp: data.forecast.forecastday[0].day.maxtemp_c,
+                    minTemp: data.forecast.forecastday[0].day.mintemp_c,
+                    weatherDescription: data.current.condition.text,
+                    cityPic: data.current.condition.icon ? `https:${data.current.condition.icon}` : "https://via.placeholder.com/800x600"
+                };
+            } catch (error) {
+                console.error("Error fetching weather data:", error);
+                document.getElementById('city_error').textContent = "Error fetching data. Please try again.";
+                document.getElementById('city_error').classList.remove('d-none');
+                return null;
+            }
+        }
+
+        function displayTripDetails(city, date, weatherData) {
+            document.getElementById('tripDetails').innerHTML = `
+                <h3 class="display-5">Your Trip Summary</h3>
+                <p><strong>Destination:</strong> ${city}</p>
+                <p><strong>Date:</strong> ${date}</p>
+                <p><strong>Temperature:</strong> ${weatherData.temp} °C</p>
+                <p><strong>Weather:</strong> ${weatherData.weatherDescription}</p>
+                <img src="${weatherData.cityPic}" alt="City Image" class="img-fluid rounded shadow" />
+            `;
+            document.getElementById('tripDetails').style.display = 'block'; // إظهار التفاصيل
+            document.getElementById('printTrip').classList.remove('d-none'); // إظهار زر الطباعة
+        }
+
+        document.getElementById('printTrip').addEventListener('click', printTripDetails);
+
+        function printTripDetails() {
+            const tripSummary = document.getElementById('tripDetails').innerHTML;
+            const printWindow = window.open('', '', 'height=400,width=600');
+            printWindow.document.write('<html><head><title>Print Trip Summary</title></head><body>');
+            printWindow.document.write(tripSummary);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
     </script>
-
-
 </body>
-
 </html>
-
-
-
