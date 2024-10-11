@@ -1,18 +1,15 @@
-const axios = require("axios");
+// getCityPic.js
+const axios = require('axios');
 
-const getCityPic = async (city, key) => {
-    try {
-        const { data } = await axios.get(`https://pixabay.com/api/?key=${key}&q=${encodeURIComponent(city)}&image_type=photo`);
-
-        const image = data.hits.length > 0 
-            ? data.hits[0].webformatURL 
-            : "https://source.unsplash.com/random/640x480?city,morning,night?sig=1";
-
-        return { image };
-    } catch (error) {
-        console.error('Error fetching city picture:', error.message);
-        return { image: "https://source.unsplash.com/random/640x480?city,morning,night?sig=1" }; // صورة افتراضية في حالة الخطأ
-    }
+const getCityPic = async (city_name, pixabayKey) => {
+  try {
+    const response = await axios.get(`https://pixabay.com/api/?key=${pixabayKey}&q=${city_name}&image_type=photo`);
+    const picture = response.data.hits[0].webformatURL;
+    return { image: picture };
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error fetching city picture');
+  }
 };
 
 module.exports = { getCityPic };

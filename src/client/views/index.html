@@ -1,63 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="http://localhost:8081/styles.css">
-    <title>Travel Planner</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <title>مشروع تحسين تجربة المستخدم</title>
 </head>
 <body>
-    <div class="container">
-        <header class="text-center my-5">
-            <h1 class="display-4">Where do you want to go?</h1>
-            <p class="lead">Plan your perfect trip with us!</p>
-        </header>
-        
-        <form id="tripForm" class="mb-4">
-            <div class="input-group mb-3">
-                <input type="text" id="city" class="form-control" placeholder="Enter your Destination" required />
-                <button class="btn btn-primary" type="submit">Submit</button>
-            </div>
-            <input type="date" id="flightDate" class="form-control mb-3" required />
-            <div id="city_error" class="alert alert-danger d-none"></div>
-        </form>
+  <div class="container">
+    <header class="text-center my-5">
+      <h1 class="display-4">أين تريد الذهاب؟</h1>
+      <p class="lead">خطط لرحلتك المثالية معنا!</p>
+    </header>
 
-        <div id="tripDetails" class="bg-light p-3 rounded mb-3"></div>
-        <button id="printTrip" class="btn btn-secondary">Print Trip</button>
-    </div>
+    <!-- نموذج البحث عن الرحلة -->
+    <form id="tripForm" class="mb-4">
+      <div class="input-group mb-3">
+        <input type="text" id="city" class="form-control" placeholder="أدخل وجهتك" required />
+        <button class="btn btn-primary" type="submit">إرسال</button>
+      </div>
+      <input type="date" id="flightDate" class="form-control mb-3" required />
+      <div id="city_error" class="alert alert-danger d-none"></div>
+      <div id="date_error" class="alert alert-danger d-none"></div> <!-- عنصر رسالة خطأ التاريخ -->
+    </form>
 
-    <script>
-      document.getElementById('tripForm').addEventListener('submit', async function(event) {
-          event.preventDefault();
-          const city = document.getElementById('city').value;
-          const date = document.getElementById('flightDate').value;
+    <!-- تفاصيل الرحلة -->
+    <div id="tripDetails" class="bg-light p-3 rounded mb-3"></div>
+    <button id="printTrip" class="btn btn-secondary mb-3">طباعة الرحلة</button>
+    <button id="clearTrip" class="btn btn-warning mb-3">مسح التفاصيل</button>
 
-          const weatherData = await getWeatherData(city);
-          displayTripDetails(city, date, weatherData);
-      });
+    <!-- نموذج الرمز البريدي -->
+    <h1>تحسين تجربة المستخدم</h1>
+    <form id="myForm" class="mb-4">
+      <label for="zipCode">الرمز البريدي</label>
+      <input type="text" id="zipCode" name="zipCode" class="form-control mb-3" required>
+      <button type="button" class="btn btn-primary" onclick="handleZipSubmit()">إرسال</button>
+      <div id="zip_error" class="alert alert-danger d-none"></div>
+    </form>
 
-      async function getWeatherData(city) {
-          // استدعاء API لاسترداد بيانات الطقس (نموذجية)
-          return {
-              temp: 25,
-              maxTemp: 30,
-              minTemp: 20,
-              weatherDescription: "Sunny",
-              cityPic: "https://via.placeholder.com/150"
-          };
-      }
+    <div id="loading-spinner" style="display: none;">Loading...</div>
+    <p id="error-message"></p>
+    
+    <div id="Rdays" class="flight_data"></div> <!-- عنصر تفاصيل الرحلة الإضافية -->
 
-      function displayTripDetails(city, date, weatherData) {
-          document.getElementById('tripDetails').innerHTML = `
-              <h3>Your Trip Summary</h3>
-              <p>Destination: ${city}</p>
-              <p>Date: ${date}</p>
-              <p>Temperature: ${weatherData.temp} °C</p>
-              <p>Weather: ${weatherData.weatherDescription}</p>
-              <img src="${weatherData.cityPic}" alt="City Image" class="img-fluid" />
-          `;
-      }
-    </script>
+    <div role="alert" aria-live="polite" id="message"></div>
+
+    <!-- إضافة عناصر جديدة لمعلومات المدينة -->
+    <div class="cityName"></div>
+    <div class="weather"></div>
+    <div class="temp"></div>
+    <img src="" class="cityPic" alt="صورة المدينة" />
+  </div>
+
+  <script src="../scripts/script.js"></script>
 </body>
 </html>

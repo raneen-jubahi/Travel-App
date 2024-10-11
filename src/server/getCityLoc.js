@@ -1,20 +1,19 @@
-const axios = require("axios");
+// getCityLoc.js
+const axios = require('axios');
 
 const getCityLoc = async (city, username) => {
-    try {
-        const { data } = await axios.get(`https://secure.geonames.org/searchJSON?q=${city}&maxRows=1&username=${username}`);
-        
-        // تحقق من وجود بيانات المدينة
-        if (data.geonames.length === 0) {
-            throw new Error('City not found');
-        }
-
-        const { name, lat, lng } = data.geonames[0];
-        return { name, lat, lng };
-    } catch (error) {
-        console.error('Error fetching city location:', error.message);
-        throw error; // إعادة الخطأ ليتعامل معه المستدعي
-    }
+  try {
+    const response = await axios.get(`http://api.geonames.org/searchJSON?q=${city}&maxRows=1&username=${username}`);
+    const location = response.data.geonames[0];
+    return {
+      lng: location.lng,
+      lat: location.lat,
+      name: location.name,
+    };
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error fetching city location');
+  }
 };
 
 module.exports = { getCityLoc };

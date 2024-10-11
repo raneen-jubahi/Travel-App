@@ -1,44 +1,36 @@
+// server.js
 const express = require("express");
-const app = express();
-const favicon = require('serve-favicon');
-const path = require('path');
+const path = require("path");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
-const port = 3001;
-
-// استيراد الدوال من الملفات الأخرى
-const { getCityLoc } = require("./getCityLoc");
-const { getWeather } = require("./getweather");
-const { getCityPic } = require("./getCityPic");
-
-// إعدادات favicon (إذا لزم الأمر)
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-
-// نقطة البداية
-app.get("/", (req, res) => {
-    res.render("index.html");
-});
-
-// قراءة بيانات JSON
-app.use(express.json());
-app.use(express.static('dist'));
 dotenv.config();
 
-// الحصول على معلومات المستخدم من المتغيرات البيئية
-const username = `${process.env.USERNAME}${process.env.USERNUMBER}`;
+const app = express();
+const port = 3001;
+
+// Import functions
+const { getCityLoc } = require("./getCityLoc");
+const { getWeather } = require("./getWeather");
+const { getCityPic } = require("./getCityPic");
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.static('dist'));
+
+// Get environment variables
+const username = process.env.USERNAME;
 const weatherKey = process.env.WEATHER_KEY;
-const pixabayKey = process.env.pixabay_key;
+const pixabayKey = process.env.PIXABAY_KEY;
+
 
 if (!weatherKey || !pixabayKey) {
-    console.error("مفاتيح API غير معرفة في المتغيرات البيئية.");
+    console.error("API keys are missing in environment variables.");
     process.exit(1);
 }
 
-// استخدام CORS
-app.use(cors());
-
-// دالة للحصول على الموقع من GeoNames
+// API routes
 app.post("/getCityLoc", async (req, res) => {
     try {
         const { city } = req.body;
@@ -46,11 +38,10 @@ app.post("/getCityLoc", async (req, res) => {
         res.send(location);
     } catch (error) {
         console.error(error);
-        res.status(500).send({ error: 'حدث خطأ أثناء الحصول على موقع المدينة' });
+        res.status(500).send({ error: "Error fetching city location" });
     }
 });
 
-// دالة للحصول على بيانات الطقس
 app.post("/getWeather", async (req, res) => {
     try {
         const { lng, lat, remainingDays } = req.body;
@@ -58,11 +49,10 @@ app.post("/getWeather", async (req, res) => {
         res.send(weatherData);
     } catch (error) {
         console.error(error);
-        res.status(500).send({ error: 'حدث خطأ أثناء الحصول على بيانات الطقس' });
+        res.status(500).send({ error: "Error fetching weather data" });
     }
 });
 
-// دالة للحصول على صورة المدينة
 app.post("/getCityPic", async (req, res) => {
     try {
         const { city_name } = req.body;
@@ -70,9 +60,11 @@ app.post("/getCityPic", async (req, res) => {
         res.send(picture);
     } catch (error) {
         console.error(error);
-        res.status(500).send({ error: 'حدث خطأ أثناء الحصول على صورة المدينة' });
+        res.status(500).send({ error: "Error fetching city picture" });
     }
 });
 
-// تشغيل السيرفر
-app.listen(port, () => console.log(`السيرفر يستمع على المنفذ ${port}`));
+// Start server
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+});
